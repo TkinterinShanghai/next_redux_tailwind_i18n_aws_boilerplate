@@ -2,25 +2,25 @@ import type { GetStaticProps, NextPage } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { useRecoverPasswordError } from "../hooks/errors/useRecoverPasswordError";
-import { useConfirmPasswordWithCodeMutation } from "../state/auth/authQuery";
-import { useAppSelector } from "../state/store";
+import { useRecoverPasswordError } from "../../hooks/errors/useRecoverPasswordError";
+import { useConfirmPasswordMutation } from "../../state/auth/authQuery";
+import { useAppSelector } from "../../state/store";
 
 const RecoverPassword: NextPage = ({}) => {
-  const [changePassword, { isSuccess, error }] = useConfirmPasswordWithCodeMutation();
+  const [changePassword, { isSuccess, error }] = useConfirmPasswordMutation();
   const { email } = useAppSelector((store) => store.user);
   const router = useRouter();
   const [errorMessage, setErrorMessage] = useState("");
   const [code, setCode] = useState("");
   const [password, setPassword] = useState("");
   useRecoverPasswordError(error, setErrorMessage);
-
+  // TODO User should automatically be logged in then
   useEffect(() => {
     if (isSuccess) {
       router.push("/");
     }
   }, [isSuccess, router]);
-  
+
   return (
     <form
       className="h-screen flex flex-col content-center m-auto justify-center w-fit"
@@ -51,8 +51,6 @@ const RecoverPassword: NextPage = ({}) => {
 };
 
 export default RecoverPassword;
-
-
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => {
   return {

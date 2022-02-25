@@ -22,11 +22,12 @@ const Home: NextPage = () => {
         <nav className="flex justify-between">
           <Auth>
             <Logout />
-            <Link href="/change-email">Change Email</Link>
+            <Link href="/auth/change-email">Change Email</Link>
+            <Link href="/auth/change-password">Change Password</Link>
           </Auth>
           <NotAuth>
-            <Link href="/register">register</Link>
-            <Link href="/login">login</Link>
+            <Link href="/auth/register">register</Link>
+            <Link href="/auth/login">login</Link>
           </NotAuth>
         </nav>
         <Language />

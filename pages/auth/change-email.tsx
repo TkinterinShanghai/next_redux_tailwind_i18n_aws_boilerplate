@@ -2,11 +2,11 @@ import type { GetStaticProps, NextPage } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { AuthStatus } from "../components/Auth";
-import { useEmailChangeErrors } from "../hooks/errors/useEmailChangeErrors";
-import { useChangeEmailMutation } from "../state/auth/authQuery";
-import { useAppDispatch, useAppSelector } from "../state/store";
-import { setEmail } from "../state/user/userSlice";
+import { AuthStatus } from "../../components/Auth";
+import { useEmailChangeErrors } from "../../hooks/errors/useEmailChangeErrors";
+import { useChangeEmailMutation } from "../../state/auth/authQuery";
+import { useAppDispatch, useAppSelector } from "../../state/store";
+import { setEmail } from "../../state/user/userSlice";
 
 export const ChangeEmail: NextPage = ({}) => {
   const [errorMessage, setErrorMessage] = useState("");
@@ -18,7 +18,7 @@ export const ChangeEmail: NextPage = ({}) => {
 
   useEffect(() => {
     if (isSuccess) {
-      router.push("/confirm-email-change");
+      router.push("/auth/confirm-email-change");
     }
   }, [router, isSuccess]);
 

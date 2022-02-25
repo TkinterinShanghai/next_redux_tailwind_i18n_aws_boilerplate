@@ -10,8 +10,8 @@ import {
 const userPoolId = process.env.NEXT_PUBLIC_COGNITO_USERPOOL_ID;
 const clientId = process.env.NEXT_PUBLIC_COGNITO_CLIENT_ID;
 
-console.log(`userpool id=${userPoolId}`);
-console.log(`client id=${clientId}`);
+// console.log(`userpool id=${userPoolId}`);
+// console.log(`client id=${clientId}`);
 
 const poolData = {
   UserPoolId: `${userPoolId}`,

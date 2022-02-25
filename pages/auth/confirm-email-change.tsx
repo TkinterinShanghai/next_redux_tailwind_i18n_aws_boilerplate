@@ -2,7 +2,7 @@ import type { GetStaticProps, NextPage } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { useConfirmNewEmailMutation } from "../state/auth/authQuery";
+import { useConfirmNewEmailMutation } from "../../state/auth/authQuery";
 
 const ConfirmEmailChange: NextPage = ({}) => {
   const [code, setCode] = useState<string>("");

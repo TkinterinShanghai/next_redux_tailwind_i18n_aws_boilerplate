@@ -1,26 +1,23 @@
 import type { GetStaticProps, NextPage } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { useLogInErrors } from "../hooks/errors/useLoginError";
-import { useLogInMutation } from "../state/auth/authQuery";
-import { useAppDispatch, useAppSelector } from "../state/store";
-import { setEmail } from "../state/user/userSlice";
+import { useRegisterUserMutation } from "../../state/auth/authQuery";
+import { useAppDispatch, useAppSelector } from "../../state/store";
+import { setEmail } from "../../state/user/userSlice";
 
-export const LogIn: NextPage = ({}) => {
+export const Register: NextPage = ({}) => {
   const [password, setPassword] = useState("");
-  const { email } = useAppSelector((state) => state.user);
-  const [errorMessage, setErrorMessage] = useState("");
+  const { email } = useAppSelector((store) => store.user);
   const dispatch = useAppDispatch();
   const router = useRouter();
-
-  const [LogInUser, { isSuccess, error }] = useLogInMutation();
-  useLogInErrors(error, setErrorMessage);
+  // TODO log in user after registration
+  // TODO handle error
+  const [registerUser, { isSuccess }] = useRegisterUserMutation();
 
   useEffect(() => {
     if (isSuccess) {
-      router.push("/");
+      router.push("/auth/verify-email");
     }
   }, [router, isSuccess]);
 
@@ -29,7 +26,7 @@ export const LogIn: NextPage = ({}) => {
       className="h-screen flex flex-col content-center m-auto justify-center w-fit"
       onSubmit={(e) => {
         e.preventDefault();
-        LogInUser({ email, password });
+        registerUser({ email, password });
       }}
     >
       <label htmlFor="email">
@@ -55,17 +52,12 @@ export const LogIn: NextPage = ({}) => {
         id="password"
         required
       />
-
-      <button type="submit">LogIn</button>
-      <div>{errorMessage}</div>
-      <Link href="/forgot-password">Forgot Password?</Link>
+      <button type="submit">Register</button>
     </form>
   );
 };
 
-export default LogIn;
-
-
+export default Register;
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => {
   return {

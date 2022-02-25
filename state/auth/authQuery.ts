@@ -40,6 +40,7 @@ export const api = createApi({
       },
     }),
     confirmUser: builder.mutation<{}, { email: string; code: string }>({
+      invalidatesTags: ["Authenticated"],
       queryFn: async ({ email, code }) => {
         return baseMutation(() => confirmRegister(email, code));
       },
@@ -66,10 +67,7 @@ export const api = createApi({
         return baseMutation(() => sendPasswordRecoverCode(email));
       },
     }),
-    confirmPasswordWithCode: builder.mutation<
-      {},
-      { email: string; code: string; password: string }
-    >({
+    confirmPassword: builder.mutation<{}, { email: string; code: string; password: string }>({
       queryFn: async ({ code, email, password }) => {
         return baseMutation(() => confirmNewPasswordWithCode(email, code, password));
       },
@@ -120,7 +118,7 @@ export const {
   useLogOutMutation,
   useChangeEmailMutation,
   useConfirmNewEmailMutation,
-  useConfirmPasswordWithCodeMutation,
+  useConfirmPasswordMutation,
   useSendPasswordRecoverCodeMutation,
   useIsAuthQuery,
   useGetUserAttributesQuery,

@@ -2,11 +2,11 @@ import type { GetStaticProps, NextPage } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { Router, useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { Language } from "../components/Language";
-import { useForgotPasswordErrors } from "../hooks/errors/useForgotPasswordErrors";
-import { useSendPasswordRecoverCodeMutation } from "../state/auth/authQuery";
-import { useAppDispatch, useAppSelector } from "../state/store";
-import { setEmail } from "../state/user/userSlice";
+import { Language } from "../../components/Language";
+import { useForgotPasswordErrors } from "../../hooks/errors/useForgotPasswordErrors";
+import { useSendPasswordRecoverCodeMutation } from "../../state/auth/authQuery";
+import { useAppDispatch, useAppSelector } from "../../state/store";
+import { setEmail } from "../../state/user/userSlice";
 
 const ForgotPassword: NextPage = ({}) => {
   const [errorMessage, setErrorMessage] = useState("");
@@ -15,12 +15,9 @@ const ForgotPassword: NextPage = ({}) => {
   const router = useRouter();
   const [sendPasswordRecoverCode, { error, isSuccess }] = useSendPasswordRecoverCodeMutation();
   useForgotPasswordErrors(error, setErrorMessage);
-  console.log("is it a success?", isSuccess);
   useEffect(() => {
-    console.log("this gets triggered");
     if (isSuccess) {
-      console.log("success!!");
-      router.push("/recover-password");
+      router.push("/auth/recover-password");
     }
   }, [isSuccess, router]);
 

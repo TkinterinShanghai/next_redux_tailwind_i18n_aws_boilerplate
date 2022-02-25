@@ -7,7 +7,6 @@ export const genericErrors = (
   setErrorMessage: Dispatch<SetStateAction<string>>,
   t: TFunction
 ) => {
-  console.log("in the generic errors")
   switch (error.name) {
     case "LimitExceededException":
       setErrorMessage("Too many requests, try again later");

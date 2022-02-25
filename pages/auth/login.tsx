@@ -1,23 +1,26 @@
 import type { GetStaticProps, NextPage } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { useRegisterUserMutation } from "../state/auth/authQuery";
-import { useAppDispatch, useAppSelector } from "../state/store";
-import { setEmail } from "../state/user/userSlice";
+import { useLogInErrors } from "../../hooks/errors/useLoginError";
+import { useLogInMutation } from "../../state/auth/authQuery";
+import { useAppDispatch, useAppSelector } from "../../state/store";
+import { setEmail } from "../../state/user/userSlice";
 
-export const Register: NextPage = ({}) => {
+export const LogIn: NextPage = ({}) => {
   const [password, setPassword] = useState("");
-  const { email } = useAppSelector((store) => store.user);
+  const { email } = useAppSelector((state) => state.user);
+  const [errorMessage, setErrorMessage] = useState("");
   const dispatch = useAppDispatch();
   const router = useRouter();
 
-  // TODO handle error
-  const [registerUser, { isSuccess }] = useRegisterUserMutation();
+  const [LogInUser, { isSuccess, error }] = useLogInMutation();
+  useLogInErrors(error, setErrorMessage);
 
   useEffect(() => {
     if (isSuccess) {
-      router.push("/verify-email");
+      router.push("/");
     }
   }, [router, isSuccess]);
 
@@ -26,7 +29,7 @@ export const Register: NextPage = ({}) => {
       className="h-screen flex flex-col content-center m-auto justify-center w-fit"
       onSubmit={(e) => {
         e.preventDefault();
-        registerUser({ email, password });
+        LogInUser({ email, password });
       }}
     >
       <label htmlFor="email">
@@ -52,12 +55,15 @@ export const Register: NextPage = ({}) => {
         id="password"
         required
       />
-      <button type="submit">Register</button>
+
+      <button type="submit">LogIn</button>
+      <div>{errorMessage}</div>
+      <Link href="/auth/forgot-password">Forgot Password?</Link>
     </form>
   );
 };
 
-export default Register;
+export default LogIn;
 
 
 

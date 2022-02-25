@@ -9,7 +9,6 @@ export const useForgotPasswordErrors = (
 ) => {
   const { t } = useTranslation();
   useEffect(() => {
-    console.log(error);
     if (error) {
       switch (error.name) {
         case "":

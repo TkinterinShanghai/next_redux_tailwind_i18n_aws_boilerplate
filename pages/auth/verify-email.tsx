@@ -2,9 +2,9 @@ import type { GetStaticProps, NextPage } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { useConfirmUserMutation, useResendConfirmationMutation } from "../state/auth/authQuery";
-import { useAppDispatch, useAppSelector } from "../state/store";
-import { setEmail } from "../state/user/userSlice";
+import { useConfirmUserMutation, useResendConfirmationMutation } from "../../state/auth/authQuery";
+import { useAppDispatch, useAppSelector } from "../../state/store";
+import { setEmail } from "../../state/user/userSlice";
 
 export const ConfirmEmail: NextPage = ({}) => {
   const [code, setCode] = useState("");
