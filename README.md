@@ -1,7 +1,12 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
-
 ## Getting Started
+create a `.env.local` file which will be used to pass environment variables to /aws/config.ts
 
+```bash
+NEXT_PUBLIC_DOMAIN=...
+
+NEXT_PUBLIC_COGNITO_USERPOOL_ID=...
+NEXT_PUBLIC_COGNITO_CLIENT_ID=...
+```
 
 install the tailwind css intellisense vscode extension to get suggestions for classnames
 

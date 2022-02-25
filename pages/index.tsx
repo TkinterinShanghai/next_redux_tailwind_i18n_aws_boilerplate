@@ -1,12 +1,14 @@
 import type { GetStaticProps, NextPage } from "next";
-import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import Head from "next/head";
-import { Counter } from "../components/counter";
+import Link from "next/link";
+import { Auth, NotAuth } from "../components/Auth";
 import { Language } from "../components/Language";
+import { Logout } from "../components/Logout";
+import { useGetUserAttributesQuery } from "../state/auth/authQuery";
 
 const Home: NextPage = () => {
-  const { t } = useTranslation();
+  const { data: email } = useGetUserAttributesQuery({ attribute: "email" });
 
   return (
     <>
@@ -17,8 +19,18 @@ const Home: NextPage = () => {
       </Head>
 
       <main className="min-h-screen flex flex-col justify-center content-center w-fit mx-auto">
+        <nav className="flex justify-between">
+          <Auth>
+            <Logout />
+            <Link href="/change-email">Change Email</Link>
+          </Auth>
+          <NotAuth>
+            <Link href="/register">register</Link>
+            <Link href="/login">login</Link>
+          </NotAuth>
+        </nav>
         <Language />
-        <Counter />
+        <h1>{email?.attr && `Logged in as: ${email?.attr}`}</h1>
       </main>
     </>
   );

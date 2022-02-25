@@ -2,5 +2,6 @@
   "language": "Deutsch",
   "number": {
     "currentValue": "Momentaner Wert"
-  }
+  }, 
+  "errors": {"testError": "das ist ein Test"}
 }

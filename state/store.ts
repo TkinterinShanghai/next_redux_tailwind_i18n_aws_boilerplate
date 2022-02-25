@@ -1,15 +1,18 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
-import { counterSlice } from "./counter/counterSlice";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
+import { setupListeners } from "@reduxjs/toolkit/query";
+import { api } from "./auth/authQuery";
+import { userSlice } from "./user/userSlice";
 
 const combinedReducer = combineReducers({
-  counter: counterSlice.reducer,
+  user: userSlice.reducer,
+  [api.reducerPath]: api.reducer,
 });
 
 const rootReducer = (state: any, action: any) => {
-  if (action.type === "user/logout") {
+  if (action.type === "auth/logout") {
     state = undefined;
-  } else if (action.type === "user/login") {
+  } else if (action.type === "auth/login") {
     state = undefined;
   }
   return combinedReducer(state, action);
@@ -17,8 +20,12 @@ const rootReducer = (state: any, action: any) => {
 
 const store = configureStore({
   reducer: rootReducer,
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(api.middleware),
 });
 
+// optional, but required for refetchOnFocus/refetchOnReconnect behaviors
+// see `setupListeners` docs - takes an optional callback as the 2nd arg for customization
+setupListeners(store.dispatch);
 
 export type RootState = ReturnType<typeof store.getState>;
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
