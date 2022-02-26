@@ -1,4 +1,4 @@
-import { createApi, fakeBaseQuery } from "@reduxjs/toolkit/query/react";
+import { createApi } from "@reduxjs/toolkit/query/react";
 import {
   confirmRegister,
   getAttributes,
@@ -13,9 +13,7 @@ import {
   confirmNewPasswordWithCode,
 } from "../../aws/cognito";
 
-type CustomErrorType = { name: string };
-
-const baseMutation = async (fn: () => any) => {
+const base = async (fn: Function) => {
   try {
     await fn();
     return { data: {} };
@@ -31,55 +29,55 @@ const baseMutation = async (fn: () => any) => {
 
 export const api = createApi({
   reducerPath: "auth",
-  baseQuery: fakeBaseQuery<CustomErrorType>(),
+  baseQuery: base,
   tagTypes: ["Authenticated"],
   endpoints: (builder) => ({
-    registerUser: builder.mutation({
+    registerUser: builder.mutation<{}, { email: string; password: string }>({
       queryFn: async ({ email, password }) => {
-        return baseMutation(() => signUpWithEmail(email, password));
+        return base(() => signUpWithEmail(email, password));
       },
     }),
     confirmUser: builder.mutation<{}, { email: string; code: string }>({
       invalidatesTags: ["Authenticated"],
       queryFn: async ({ email, code }) => {
-        return baseMutation(() => confirmRegister(email, code));
+        return base(() => confirmRegister(email, code));
       },
     }),
     resendConfirmation: builder.mutation<{}, { email: string }>({
       queryFn: async ({ email }) => {
-        return baseMutation(() => resendConfirmationCode(email));
+        return base(() => resendConfirmationCode(email));
       },
     }),
     logIn: builder.mutation<{}, { email: string; password: string }>({
       invalidatesTags: ["Authenticated"],
       queryFn: async ({ email, password }) => {
-        return baseMutation(() => signInWithEmail(email, password));
+        return base(() => signInWithEmail(email, password));
       },
     }),
     logOut: builder.mutation({
       invalidatesTags: ["Authenticated"],
       queryFn: async () => {
-        return baseMutation(() => signOutUser());
+        return base(() => signOutUser());
       },
     }),
     sendPasswordRecoverCode: builder.mutation<{}, { email: string }>({
       queryFn: async ({ email }) => {
-        return baseMutation(() => sendPasswordRecoverCode(email));
+        return base(() => sendPasswordRecoverCode(email));
       },
     }),
     confirmPassword: builder.mutation<{}, { email: string; code: string; password: string }>({
       queryFn: async ({ code, email, password }) => {
-        return baseMutation(() => confirmNewPasswordWithCode(email, code, password));
+        return base(() => confirmNewPasswordWithCode(email, code, password));
       },
     }),
     changeEmail: builder.mutation<{}, { email: string }>({
       queryFn: async ({ email }) => {
-        return baseMutation(() => changeEmail(email));
+        return base(() => changeEmail(email));
       },
     }),
     confirmNewEmail: builder.mutation<{}, { code: string }>({
       queryFn: async ({ code }) => {
-        return baseMutation(() => confirmNewEmail(code));
+        return base(() => confirmNewEmail(code));
       },
     }),
     getUserAttributes: builder.query<{ attr: string | undefined }, { attribute: string }>({
@@ -98,6 +96,7 @@ export const api = createApi({
       providesTags: ["Authenticated"],
       queryFn: async () => {
         try {
+          console.log("isAuth function gets triggered");
           const session = await getSession();
           return { data: session?.isValid() ? true : false };
         } catch (e) {
