@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useLogInErrors } from "../../hooks/errors/useLoginError";
-import { useLogInMutation } from "../../state/auth/authQuery";
+import { useIsAuthQuery, useLogInMutation } from "../../state/auth/authQuery";
 import { useAppDispatch, useAppSelector } from "../../state/store";
 import { setEmail } from "../../state/user/userSlice";
 
@@ -16,13 +16,15 @@ export const LogIn: NextPage = ({}) => {
   const router = useRouter();
 
   const [LogInUser, { isSuccess, error }] = useLogInMutation();
+  const { data: isAuth } = useIsAuthQuery({});
+
   useLogInErrors(error, setErrorMessage);
 
   useEffect(() => {
-    if (isSuccess) {
+    if (isSuccess && isAuth) {
       router.push("/");
     }
-  }, [router, isSuccess]);
+  }, [router, isSuccess, isAuth]);
 
   return (
     <form
@@ -64,8 +66,6 @@ export const LogIn: NextPage = ({}) => {
 };
 
 export default LogIn;
-
-
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => {
   return {
