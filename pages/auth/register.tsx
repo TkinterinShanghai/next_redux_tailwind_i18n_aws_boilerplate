@@ -4,11 +4,12 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useRegisterUserMutation } from "../../state/auth/authQuery";
 import { useAppDispatch, useAppSelector } from "../../state/store";
-import { setEmail } from "../../state/user/userSlice";
+import { setEmail } from "../../state/auth/authSlice";
+import { RedirectFrontPage } from "../../components/Auth";
 
 export const Register: NextPage = ({}) => {
   const [password, setPassword] = useState("");
-  const { email } = useAppSelector((store) => store.user);
+  const { email } = useAppSelector((store) => store.auth);
   const dispatch = useAppDispatch();
   const router = useRouter();
   // TODO log in user after registration
@@ -22,38 +23,40 @@ export const Register: NextPage = ({}) => {
   }, [router, isSuccess]);
 
   return (
-    <form
-      className="h-screen flex flex-col content-center m-auto justify-center w-fit"
-      onSubmit={(e) => {
-        e.preventDefault();
-        registerUser({ email, password });
-      }}
-    >
-      <label htmlFor="email">
-        <b>Email</b>
-      </label>
-      <input
-        value={email}
-        onChange={(e) => dispatch(setEmail(e.target.value))}
-        type="text"
-        placeholder="Enter Email"
-        name="email"
-        id="email"
-        required
-      />
-      <label htmlFor="password">
-        <b>Password</b>
-      </label>
-      <input
-        onChange={(e) => setPassword(e.target.value)}
-        type="password"
-        placeholder="Enter Password"
-        name="password"
-        id="password"
-        required
-      />
-      <button type="submit">Register</button>
-    </form>
+    <RedirectFrontPage>
+      <form
+        className="h-screen flex flex-col content-center m-auto justify-center w-fit"
+        onSubmit={(e) => {
+          e.preventDefault();
+          registerUser({ email, password });
+        }}
+      >
+        <label htmlFor="email">
+          <b>Email</b>
+        </label>
+        <input
+          value={email}
+          onChange={(e) => dispatch(setEmail(e.target.value))}
+          type="text"
+          placeholder="Enter Email"
+          name="email"
+          id="email"
+          required
+        />
+        <label htmlFor="password">
+          <b>Password</b>
+        </label>
+        <input
+          onChange={(e) => setPassword(e.target.value)}
+          type="password"
+          placeholder="Enter Password"
+          name="password"
+          id="password"
+          required
+        />
+        <button type="submit">Register</button>
+      </form>
+    </RedirectFrontPage>
   );
 };
 

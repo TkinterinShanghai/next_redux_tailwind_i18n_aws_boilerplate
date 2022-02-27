@@ -6,11 +6,11 @@ import { AuthStatus } from "../../components/Auth";
 import { useEmailChangeErrors } from "../../hooks/errors/useEmailChangeErrors";
 import { useChangeEmailMutation } from "../../state/auth/authQuery";
 import { useAppDispatch, useAppSelector } from "../../state/store";
-import { setEmail } from "../../state/user/userSlice";
+import { setEmail } from "../../state/auth/authSlice";
 
 export const ChangeEmail: NextPage = ({}) => {
   const [errorMessage, setErrorMessage] = useState("");
-  const { email } = useAppSelector((state) => state.user);
+  const { email } = useAppSelector((state) => state.auth);
   const [changeEmail, { isSuccess, error }] = useChangeEmailMutation();
   const dispatch = useAppDispatch();
   const router = useRouter();

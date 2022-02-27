@@ -19,7 +19,7 @@ const Home: NextPage = () => {
       </Head>
 
       <main className="min-h-screen flex flex-col justify-center content-center w-fit mx-auto">
-        <nav className="flex justify-between">
+        <nav className="flex flex-col justify-between">
           <Auth>
             <Logout />
             <Link href="/auth/change-email">Change Email</Link>

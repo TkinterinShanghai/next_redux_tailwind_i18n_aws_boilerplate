@@ -4,6 +4,7 @@ import {
   CognitoUserAttribute,
   CognitoUserPool,
   CognitoUserSession,
+  CookieStorage,
   ISignUpResult,
 } from "amazon-cognito-identity-js";
 
@@ -16,6 +17,7 @@ const clientId = process.env.NEXT_PUBLIC_COGNITO_CLIENT_ID;
 const poolData = {
   UserPoolId: `${userPoolId}`,
   ClientId: `${clientId}`,
+  // Storage: new CookieStorage({ domain: "localhost", secure: false }),
 };
 
 export const userPool: CognitoUserPool = new CognitoUserPool(poolData);
@@ -30,6 +32,7 @@ function getCognitoUser(username: string) {
   const userData = {
     Username: username,
     Pool: userPool,
+    // Storage: new CookieStorage({ domain: "localhost", secure: false }),
   };
   const cognitoUser = new CognitoUser(userData);
 
@@ -148,6 +151,7 @@ export async function signInWithEmail(email: string, password: string) {
     currentUser.setAuthenticationFlowType("USER_PASSWORD_AUTH");
     currentUser.authenticateUser(authenticationDetails, {
       onSuccess: function (res) {
+        console.log(res);
         resolve(res);
       },
       onFailure: function (err) {
@@ -160,9 +164,12 @@ export async function signInWithEmail(email: string, password: string) {
 }
 
 export function signOutUser() {
-  if (currentUser) {
-    currentUser.signOut();
-  }
+  return new Promise(function (resolve) {
+    if (currentUser)
+      currentUser.signOut(function () {
+        resolve(undefined);
+      });
+  });
 }
 
 export async function getAttributes() {
