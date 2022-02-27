@@ -3,6 +3,22 @@ import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import { setupListeners } from "@reduxjs/toolkit/query";
 import { authQuery } from "./auth/authQuery";
 import { authSlice } from "./auth/authSlice";
+import {
+  FLUSH,
+  PAUSE,
+  PERSIST,
+  persistReducer,
+  PURGE,
+  REGISTER,
+  REHYDRATE,
+} from "redux-persist";
+import storage from "redux-persist/lib/storage";
+
+const persistConfig = {
+  key: "root",
+  version: 1,
+  storage,
+};
 
 const combinedReducer = combineReducers({
   auth: authSlice.reducer,
@@ -19,10 +35,16 @@ const rootReducer = (state: any, action: any) => {
   return combinedReducer(state, action);
 };
 
+const persistedReducer = persistReducer(persistConfig, rootReducer);
+
 const store = configureStore({
-  reducer: rootReducer,
+  reducer: persistedReducer,
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(authQuery.middleware),
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+      },
+    }).concat(authQuery.middleware),
 });
 
 // optional, but required for refetchOnFocus/refetchOnReconnect behaviors
